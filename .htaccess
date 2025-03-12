@@ -1,0 +1,56 @@
+# Enable rewrite engine
+RewriteEngine On
+
+# Set the base directory
+RewriteBase /
+
+# Redirect to HTTPS (uncomment in production)
+# RewriteCond %{HTTPS} off
+# RewriteRule ^(.*)$ https://%{HTTP_HOST}%{REQUEST_URI} [L,R=301]
+
+# Prevent directory listing
+Options -Indexes
+
+# Protect sensitive files
+<FilesMatch "^\.(htaccess|htpasswd|ini|log|sh|inc|bak|git)$">
+Order Allow,Deny
+Deny from all
+</FilesMatch>
+
+# PHP settings
+<IfModule mod_php7.c>
+    # Set safe mode off
+    php_flag safe_mode off
+    
+    # Maximum execution time
+    php_value max_execution_time 60
+    
+    # Maximum upload file size
+    php_value upload_max_filesize 10M
+    
+    # Maximum post size
+    php_value post_max_size 10M
+    
+    # Memory limit
+    php_value memory_limit 128M
+    
+    # Error reporting (comment in production)
+    php_flag display_errors on
+    php_value error_reporting E_ALL
+</IfModule>
+
+# Set default character set
+AddDefaultCharset UTF-8
+
+# Enable HTTP Strict Transport Security (HSTS) (uncomment in production)
+# <IfModule mod_headers.c>
+#     Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+# </IfModule>
+
+# Prevent some browsers from MIME-sniffing
+<IfModule mod_headers.c>
+    Header set X-Content-Type-Options "nosniff"
+</IfModule>
+
+# Disable server signature
+ServerSignature Off
